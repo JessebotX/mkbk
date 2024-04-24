@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/JessebotX/mkbk"
 )
 
 func main() {
 	fmt.Println("Hello, world")
 
-	book := Book{
+	book := mkbk.Book{
 		Title: "Hello",
 	}
 
