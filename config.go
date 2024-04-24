@@ -4,19 +4,11 @@ import (
 	"time"
 )
 
-type BookStatus string
-
-const (
-	STATUS_COMPLETED BookStatus = "completed"
-	STATUS_ONGOING   BookStatus = "ongoing"
-	STATUS_HIATUS    BookStatus = "hiatus"
-)
-
 type Book struct {
 	Params        map[string]any
 	Title         string
 	TitleSort     string
-	Status        BookStatus
+	Status        string
 	LanguageCode  string
 	Tags          []string
 	Logline       string
