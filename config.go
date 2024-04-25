@@ -17,8 +17,6 @@ type Book struct {
 	Publisher     string
 	CoverPath     string
 	Chapters      []Chapter
-	DatePublished time.Time
-	LastModified  time.Time
 	SeriesName    string
 	SeriesNumber  float32
 	IDs           []string
