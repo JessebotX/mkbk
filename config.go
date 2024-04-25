@@ -26,6 +26,7 @@ type Book struct {
 }
 
 type Chapter struct {
+	Params        map[string]any
 	ParentBook    *Book
 	ParentChapter *Chapter
 	Title         string
@@ -34,21 +35,20 @@ type Chapter struct {
 	LastModified  time.Time
 	Weight        int
 	Subchapters   []Chapter
-	Params        map[string]any
 }
 
 type Author struct {
+	Params    map[string]any
 	Name      string
 	NameSort  string
 	Bio       string
 	Addresses []Address
 	ImagePath string
-	Params    map[string]any
 }
 
 type Address struct {
+	Params  map[string]any
 	Name    string
 	Address string
 	IsURL   bool
-	Params  map[string]any
 }
