@@ -14,7 +14,7 @@ type Book struct {
 	Logline       string
 	Content       string
 	Authors       []Author
-	Publisher     Publisher
+	Publisher     string
 	CoverPath     string
 	Chapters      []Chapter
 	DatePublished time.Time
@@ -35,14 +35,6 @@ type Chapter struct {
 	Weight        int
 	Subchapters   []Chapter
 	Params        map[string]any
-}
-
-type Publisher struct {
-	Name      string
-	Addresses []Address
-	Bio       string
-	ImagePath string
-	Params    map[string]any
 }
 
 type Author struct {
