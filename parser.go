@@ -1,6 +1,7 @@
 package mkbk
 
 import (
+	"encoding/json"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -33,6 +34,15 @@ func UnmarshalBookConfigData(data []byte, book *Book) error {
 		return err
 	}
 
+	jsonbody, err := json.Marshal(book.Params)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(jsonbody, &book)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
-
