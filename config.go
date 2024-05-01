@@ -36,7 +36,6 @@ type Chapter struct {
 }
 
 type Author struct {
-	Params    map[string]any
 	Name      string
 	NameSort  string
 	Bio       string
@@ -45,7 +44,6 @@ type Author struct {
 }
 
 type Address struct {
-	Params  map[string]any
 	Name    string
 	Address string
 	IsURL   bool

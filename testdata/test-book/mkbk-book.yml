@@ -16,7 +16,6 @@ authors:
     addresses:
       - name: X (Twitter)
         address: https://twitter.com
-        extraParam: hello world
 publisher: Neon Lights Publishing House
 coverPath: images/cover.png
 ids:
