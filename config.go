@@ -5,34 +5,34 @@ import (
 )
 
 type Book struct {
-	Params        map[string]any
-	Title         string
-	TitleSort     string
-	Status        string
-	LanguageCode  string
-	Tags          []string
-	Logline       string
-	Content       string
-	Authors       []Author
-	Publisher     string
-	CoverPath     string
-	Chapters      []Chapter
-	SeriesName    string
-	SeriesNumber  float32
-	IDs           []string
-	Mirrors       []Address
+	Params       map[string]any
+	Title        string
+	TitleSort    string
+	Status       string
+	LanguageCode string
+	Tags         []string
+	Logline      string
+	Content      string
+	Authors      []Author
+	Publisher    string
+	CoverPath    string
+	Chapters     []Chapter
+	SeriesName   string
+	SeriesNumber float32
+	IDs          []string
+	Mirrors      []Address
 }
 
 type Chapter struct {
-	Params        map[string]any
-	ParentBook    *Book
-	ParentChapter *Chapter
-	Title         string
-	Description   string
-	DatePublished time.Time
-	LastModified  time.Time
-	Weight        int
-	Subchapters   []Chapter
+	Params             map[string]any
+	ParentBook         *Book
+	ParentSectionTitle string
+	Slug               string
+	Title              string
+	Description        string
+	DatePublished      time.Time
+	LastModified       time.Time
+	Weight             int
 }
 
 type Author struct {
