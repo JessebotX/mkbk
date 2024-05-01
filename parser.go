@@ -34,6 +34,9 @@ func UnmarshalBookConfigData(data []byte, book *Book) error {
 		return err
 	}
 
+	// apparently, json unmarshalling/marshalling fixes problems with
+	// yaml marshalling/unmarshalling into things like camel case
+	// (e.g. coverPath == CoverPath == coverpath, etc.)
 	jsonbody, err := json.Marshal(book.Params)
 	if err != nil {
 		return err
