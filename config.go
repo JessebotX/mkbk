@@ -1,6 +1,7 @@
 package mkbk
 
 import (
+	"html/template"
 	"time"
 )
 
@@ -25,14 +26,17 @@ type Book struct {
 
 type Chapter struct {
 	Params             map[string]any
-	ParentBook         *Book
+	Parent             *Book
 	ParentSectionTitle string
 	Slug               string
 	Title              string
 	Description        string
-	DatePublished      time.Time
+	Date               time.Time
 	LastModified       time.Time
 	Weight             int
+	ContentHTML        template.HTML
+	Previous           *Chapter
+	Next               *Chapter
 }
 
 type Author struct {

@@ -20,6 +20,7 @@ func main() {
 	}
 
 	fmt.Printf("----\nBook\n----\n%#v\n", book)
+	fmt.Printf("----\nChapters\n----\n%#v\n", book.Chapters)
 	// fmt.Printf("Book Params:\n%#v\n",
 	// 	book.Params["authors"].([]any)[0].(map[string]any)["bio"])
 }
