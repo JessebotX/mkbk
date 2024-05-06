@@ -1,14 +1,14 @@
 package mkbk
 
 import (
-	"strings"
 	"html/template"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 const (
-	IndexTemplateName = "index.html"
+	IndexTemplateName   = "index.html"
 	ChapterTemplateName = "_chapter.html"
 )
 
