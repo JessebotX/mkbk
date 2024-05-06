@@ -1,9 +1,15 @@
 package mkbk
 
 import (
+	"strings"
 	"html/template"
 	"os"
 	"path/filepath"
+)
+
+const (
+	IndexTemplateName = "index.html"
+	ChapterTemplateName = "_chapter.html"
 )
 
 func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
@@ -16,23 +22,25 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 	}
 
 	// read layout configurations
-	indexTemplate, err := template.ParseFiles(filepath.Join(layoutDir, "index.html"))
+	indexTemplate, err := template.ParseFiles(filepath.Join(layoutDir, IndexTemplateName))
 	if err != nil {
 		return err
 	}
 
-	chapterTemplate, err := template.ParseFiles(filepath.Join(layoutDir, "_chapter.html"))
+	chapterTemplate, err := template.ParseFiles(filepath.Join(layoutDir, ChapterTemplateName))
 	if err != nil {
 		return err
 	}
 
-	indexFile, err := os.Create(filepath.Join(outputDir, "index.html"))
+	indexFile, err := os.Create(filepath.Join(outputDir, IndexTemplateName))
 	if err != nil {
 		return err
 	}
 
-	_ = indexTemplate
-	_ = chapterTemplate
+	err = copyDirectoryToOutput(layoutDir, outputDir, []string{IndexTemplateName, ChapterTemplateName, "README.md"})
+	if err != nil {
+		return err
+	}
 
 	// create index
 	err = indexTemplate.Execute(indexFile, book)
@@ -50,6 +58,51 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 		defer chapterFile.Close()
 
 		err = chapterTemplate.Execute(chapterFile, &chapter)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func copyDirectoryToOutput(inputDir, outputDir string, excludes []string) error {
+	items, err := os.ReadDir(inputDir)
+	if err != nil {
+		return err
+	}
+
+	for _, item := range items {
+		excluded := false
+		for _, exclude := range excludes {
+			if strings.ToLower(exclude) == item.Name() {
+				excluded = true
+				break
+			}
+		}
+
+		if excluded {
+			continue
+		}
+
+		fullPath := filepath.Join(inputDir, item.Name())
+		outputPath := filepath.Join(outputDir, item.Name())
+
+		if item.IsDir() {
+			err = os.MkdirAll(outputPath, os.ModePerm)
+			if err != nil {
+				return err
+			}
+
+			return copyDirectoryToOutput(fullPath, outputPath, []string{})
+		}
+
+		err = os.RemoveAll(outputPath)
+		if err != nil {
+			return err
+		}
+
+		err = os.Link(fullPath, outputPath)
 		if err != nil {
 			return err
 		}
