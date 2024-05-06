@@ -1,1 +1,112 @@
-INDEX {{ .Title }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="assets/vendor/modern-normalize.min.css">
+    <link rel="stylesheet" href="assets/style.css">
+
+    <title>{{ .Title }}</title>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header header--book">
+        <h1 class="header-title">{{ .Title }}</h1>
+        <ul class="book-authors">
+          {{ range .Authors }}
+          <li>{{ .Name }}</li>
+          {{ end }}
+        </ul>
+      </header>
+
+      <main class="main main--book">
+        <div class="book-section">
+          <ul class="book-metadata">
+            <li class="book-metadata-item">
+              <span class="book-metadata-item-label">Status:</span>
+              <span class="book-metadata-item-content">
+                {{ with .Status -}}
+                {{ . }}
+                {{- else -}}
+                N/A
+                {{- end }}
+              </span>
+            </li>
+            <li class="book-metadata-item">
+              <span class="book-metadata-item-label">Chapters:</span>
+              <span class="book-metadata-item-content">
+                {{ len .Chapters }}
+              </span>
+            </li>
+            <li class="book-metadata-item">
+              <span class="book-metadata-item-label">Authors:</span>
+              <span class="book-metadata-item-content">
+                {{ with .Authors -}}
+                <ul class="book-metadata-list">
+                  {{ range . -}}
+                  <li class="book-metadata-list-item">{{ .Name }}</li>
+                  {{- end }}
+                </ul>
+                {{- else -}}
+                N/A
+                {{- end }}
+              </span>
+            </li>
+            <li class="book-metadata-item">
+              <span class="book-metadata-item-label">Publisher:</span>
+              <span class="book-metadata-item-content">
+                {{ with .Publisher -}}
+                {{ . }}
+                {{- else -}}
+                N/A
+                {{- end }}
+              </span>
+            </li>
+            <li class="book-metadata-item">
+              <span class="book-metadata-item-label">Tags:</span>
+              <span class="book-metadata-item-content">
+                {{ with .Tags -}}
+                <ul class="book-metadata-list">
+                  {{ range . -}}
+                  <li class="book-metadata-list-item">{{ . }}</li>
+                  {{- end }}
+                </ul>
+                {{- else -}}
+                N/A
+                {{- end }}
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        {{ with .Logline -}}
+        <div class="book-section book-section--logline">
+          {{ . }}
+        </div>
+        {{- end }}
+
+        <div class="book-section">
+          <p>
+            {{ .Content }}
+          </p>
+        </div>
+
+        <div class="book-section">
+          <h2 class="book-section-title">Table of Contents</h2>
+          <nav class="book-nav">
+            {{ range .Chapters -}}
+            <a class="book-nav-item"
+               href="{{ .Slug }}.html">
+              <h4 class="book-nav-item-title">{{ .Title }}</h4>
+              {{ with .Description -}}
+              <p class="book-nav-item-description">{{ . }}</p>
+              {{- end }}
+            </a>
+            {{- end }}
+          </nav>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

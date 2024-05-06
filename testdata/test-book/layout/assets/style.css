@@ -1,6 +1,120 @@
-body {
+:root {
+  line-height: 1.3;
+}
+
+a {
+  color: #531ab6;
+}
+
+a:hover {
+  background-color: #531ab6;
+  color: #fff;
+  text-decoration: none;
+}
+
+.app {
+  max-width: calc(50rem + 22rem + 5rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 22rem auto;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.header {
+  border-top: 0.2rem solid black;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.main {
+  margin-top: 0.7rem;
+}
+
+.header--book {
+  text-align: right;
+}
+
+.header-title {
+  margin: 0;
+}
+
+.book-authors {
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0;
+}
+
+.book-section {
+  margin-bottom: 1.5rem;
+}
+
+.book-section--logline {
+  font-style: italic;
+}
+
+.book-section p:first-child {
+  margin-top: 0;
+}
+
+.book-metadata {
+  margin: 0;
+  margin-bottom: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.book-metadata-item {
+  display: grid;
+  grid-template-columns: 15ch auto;
+}
+
+.book-metadata-item-label {
+  color: #595959;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.book-metadata-list {
   margin: 0;
   padding: 0;
-  background: black;
-  color: white;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.book-metadata-list-item {
+  white-space: nowrap;
+}
+
+.book-metadata-list-item + .book-metadata-list-item:before {
+  content: ', ';
+}
+
+.book-nav-item {
+  display: block;
+  color: #0040ff;
+  text-decoration: none;
+  margin-bottom: 0.25rem;
+  padding: 0.5rem;
+  padding-left: 0rem;
+  border-bottom: 0.2rem solid transparent;
+  border-top: 0.2rem solid transparent;
+}
+
+.book-nav-item:hover {
+  background: none;
+  color: darkblue;
+  padding-left: 0.5rem;
+  border: 0.2rem solid darkblue;
+}
+
+.book-nav-item-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.book-nav-item-description {
+  margin: 0;
 }
