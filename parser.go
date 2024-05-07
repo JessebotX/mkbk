@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"os"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strings"
 	"time"
@@ -63,6 +64,11 @@ func UnmarshalBookConfigData(dir string, data []byte, book *Book) error {
 	book.Chapters, err = readChaptersDir(filepath.Join(dir, "src"), book)
 	if err != nil {
 		return err
+	}
+
+	if strings.TrimSpace(book.Slug) == "" {
+		sanitizer := regexp.MustCompile("([^a-zA-Z0-9]+)")
+		book.Slug = sanitizer.ReplaceAllString(book.Title, "-")
 	}
 
 	return nil

@@ -4,7 +4,6 @@ import (
 	"html/template"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 
 	epub "github.com/go-shiori/go-epub"
@@ -85,9 +84,7 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 		}
 	}
 
-	sanitizer := regexp.MustCompile("([^a-zA-Z0-9]+)")
-	bookEpubName := sanitizer.ReplaceAllString(book.Title, "-")
-	bookEpubPath := filepath.Join(outputDir, strings.ToLower(bookEpubName+".epub"))
+	bookEpubPath := filepath.Join(outputDir, strings.ToLower(book.Slug+".epub"))
 
 	err = bookEpub.Write(bookEpubPath)
 	if err != nil {
