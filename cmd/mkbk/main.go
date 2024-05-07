@@ -9,9 +9,7 @@ import (
 func main() {
 	// fmt.Println("Hello, world")
 
-	book := mkbk.Book{
-		Title: "Hello",
-	}
+	book := mkbk.Book{}
 
 	err := mkbk.UnmarshalBookConfigFile("mkbk-book.yml", &book)
 	if err != nil {
