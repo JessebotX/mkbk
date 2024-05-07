@@ -93,17 +93,73 @@
         </div>
 
         <div class="book-section">
+          <div class="book-read">
+            <div class="book-read-header">
+              <h2 class="book-read-title">e-book</h2>
+              <a href="#" class="book-read-button">
+                Download EPUB
+                ({{ len .Chapters }} Chapters)
+              </a>
+            </div>
+            <div class="book-read-contents">
+              <ul class="book-read-list">
+                <li class="book-read-list-item">
+                  Standardized format (EPUB) works on most ereader devices
+                  <ul>
+                    <li>
+                      <em>Easily convert to other formats</em> (i.e. using <a href="https://calibre-ebook.com/">Calibre</a>, <a href="https://www.amazon.com/sendtokindle">Send to Kindle</a>)</li>
+                  </ul>
+                </li>
+                <li class="book-read-list-item">
+                  100% Free
+                </li>
+                <li class="book-read-list-item">
+                  Auto generated and up-to-date with Web version
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="book-read">
+            <div class="book-read-header">
+              <h2 class="book-read-title">Web</h2>
+              <a href="#" class="book-read-button">
+                Read for Free
+                ({{ len .Chapters }} Chapters)
+              </a>
+            </div>
+            <div class="book-read-contents">
+              <ul class="book-read-list">
+                <li class="book-read-list-item">
+                  Responsive design that can be read on any device
+                </li>
+                <li class="book-read-list-item">
+                  {{ .Status }} ({{ len .Chapters }} Chapters)
+                </li>
+                <li class="book-read-list-item">
+                  100% Free
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="book-section">
           <h2 class="book-section-title">Table of Contents</h2>
           <nav class="book-nav">
-            {{ range .Chapters -}}
-            <a class="book-nav-item"
-               href="{{ .Slug }}.html">
-              <h4 class="book-nav-item-title">{{ .Title }}</h4>
-              {{ with .Description -}}
-              <p class="book-nav-item-description">{{ . }}</p>
+            <ol class="book-nav-list">
+              {{ range .Chapters -}}
+              <li class="book-nav-list-item-wrapper">
+                <a class="book-nav-list-item"
+                   href="{{ .Slug }}.html">
+                  <h3 class="book-nav-list-item-title">{{ .Title }}</h3>
+                  {{ with .Description -}}
+                  <p class="book-nav-list-item-description">{{ . }}</p>
+                  {{- end }}
+                </a>
+              </li>
               {{- end }}
-            </a>
-            {{- end }}
+            </ol>
           </nav>
         </div>
       </main>
