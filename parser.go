@@ -74,14 +74,14 @@ func UnmarshalBookConfigData(dir string, data []byte, book *Book) error {
 		book.ChaptersDir = "src"
 	}
 
+	if strings.TrimSpace(book.Slug) == "" {
+		sanitizer := regexp.MustCompile("([^a-zA-Z0-9]+)")
+		book.Slug = strings.ToLower(sanitizer.ReplaceAllString(book.Title, "-"))
+	}
+
 	book.Chapters, err = readChaptersDir(filepath.Join(dir, book.ChaptersDir), book)
 	if err != nil {
 		return err
-	}
-
-	if strings.TrimSpace(book.Slug) == "" {
-		sanitizer := regexp.MustCompile("([^a-zA-Z0-9]+)")
-		book.Slug = sanitizer.ReplaceAllString(book.Title, "-")
 	}
 
 	return nil

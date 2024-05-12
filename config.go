@@ -28,6 +28,10 @@ type Book struct {
 	Mirrors      []Address
 }
 
+func (b Book) EpubBaseName() string {
+	return b.Slug + ".epub"
+}
+
 type Chapter struct {
 	Params             map[string]any
 	Parent             *Book

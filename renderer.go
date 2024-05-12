@@ -84,7 +84,7 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 		}
 	}
 
-	bookEpubPath := filepath.Join(outputDir, strings.ToLower(book.Slug+".epub"))
+	bookEpubPath := filepath.Join(outputDir, book.EpubBaseName())
 
 	err = bookEpub.Write(bookEpubPath)
 	if err != nil {
