@@ -61,7 +61,20 @@ func UnmarshalBookConfigData(dir string, data []byte, book *Book) error {
 		return err
 	}
 
-	book.Chapters, err = readChaptersDir(filepath.Join(dir, "src"), book)
+	// default directory configurations
+	if strings.TrimSpace(book.OutputDir) == "" {
+		book.OutputDir = "out"
+	}
+
+	if strings.TrimSpace(book.LayoutDir) == "" {
+		book.LayoutDir = "layout"
+	}
+
+	if strings.TrimSpace(book.ChaptersDir) == "" {
+		book.ChaptersDir = "src"
+	}
+
+	book.Chapters, err = readChaptersDir(filepath.Join(dir, book.ChaptersDir), book)
 	if err != nil {
 		return err
 	}

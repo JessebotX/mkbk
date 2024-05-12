@@ -7,8 +7,6 @@ import (
 )
 
 func main() {
-	// fmt.Println("Hello, world")
-
 	book := mkbk.Book{}
 
 	err := mkbk.UnmarshalBookConfigFile("mkbk-book.yml", &book)
@@ -16,10 +14,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// fmt.Printf("----\nBook\n----\n%#v\n", book)
-	// fmt.Printf("----\nChapters\n----\n%#v\n", book.Chapters)
-
-	err = mkbk.RenderBookToHTMLSite("./", "out", &book)
+	err = mkbk.RenderBookToHTMLSite("./", book.OutputDir, &book)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -7,6 +7,9 @@ import (
 
 type Book struct {
 	Params       map[string]any
+	LayoutDir    string
+	OutputDir    string
+	ChaptersDir  string
 	Slug         string
 	Title        string
 	TitleSort    string
