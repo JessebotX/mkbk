@@ -11,7 +11,6 @@ tags:
 logline: This is a simple logline of the book
 authors:
   - name: Bob Bobber
-    nameSort: Bobber, Bob
     bio: >
       Bob Bobber is an anonymous internet writer known for his
       unprecedented work on The Grand Neverending Adventure.
@@ -19,7 +18,7 @@ authors:
       - name: X (Twitter)
         address: https://twitter.com
 publisher: Neon Lights Publishing House
-coverPath: images/cover.png
+coverPath: images/cover.jpg
 ids:
   - "isbn:978-3-16-148410-0"
 content: |

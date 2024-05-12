@@ -91,6 +91,38 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 		return err
 	}
 
+	if strings.TrimSpace(book.CoverPath) != "" {
+		dir := filepath.Dir(book.CoverPath)
+
+		err = os.MkdirAll(filepath.Join(outputDir, dir), os.ModePerm)
+		if err != nil {
+			return err
+		}
+
+		err = os.Link(book.CoverPath, filepath.Join(outputDir, book.CoverPath))
+		if err != nil {
+			return err
+		}
+	}
+
+	for _, author := range book.Authors {
+		if strings.TrimSpace(author.ImagePath) == "" {
+			continue
+		}
+
+		dir := filepath.Dir(author.ImagePath)
+
+		err = os.MkdirAll(filepath.Join(outputDir, dir), os.ModePerm)
+		if err != nil {
+			return err
+		}
+
+		err = os.Link(author.ImagePath, filepath.Join(outputDir, author.ImagePath))
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
