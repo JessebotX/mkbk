@@ -18,8 +18,14 @@ const (
 func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 	layoutDir := filepath.Join(inputDir, book.LayoutDir)
 
+	// clean up any existing output dir
+	err := os.RemoveAll(outputDir)
+	if err != nil {
+		return err
+	}
+
 	// make root output directory
-	err := os.MkdirAll(outputDir, os.ModePerm)
+	err = os.MkdirAll(outputDir, os.ModePerm)
 	if err != nil {
 		return err
 	}
