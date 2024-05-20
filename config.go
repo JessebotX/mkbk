@@ -12,7 +12,6 @@ type Book struct {
 	ChaptersDir  string
 	Slug         string
 	Title        string
-	TitleSort    string
 	Status       string
 	LanguageCode string
 	Tags         []string
