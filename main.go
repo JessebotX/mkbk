@@ -3,18 +3,17 @@ package main
 import (
 	"log"
 
-	"github.com/JessebotX/mkbk"
 )
 
 func main() {
-	book := mkbk.Book{}
+	book := Book{}
 
-	err := mkbk.UnmarshalBookConfigFile("mkbk-book.yml", &book)
+	err := UnmarshalBookConfigFile("mkbk-book.yml", &book)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = mkbk.RenderBookToHTMLSite("./", book.OutputDir, &book)
+	err = RenderBookToHTMLSite("./", book.OutputDir, &book)
 	if err != nil {
 		log.Fatal(err)
 	}
