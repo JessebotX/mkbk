@@ -1,0 +1,33 @@
+title: The Grand Neverending Adventure
+status: Completed
+logline: This is a simple book logline
+baseURL: https://example.com
+languageCode: en
+series:
+  - name: The Grand Neverending Adventure Trilogy
+    number: 1.0
+    #link: https://example.com
+authors:
+  - name: Derek Garrett
+    bio: >-
+      Derek B. Garrett is a debut bestselling author known for his genre mashup
+      web-serialized fiction, most notably The Grand Neverending Adventure
+      Trilogy. 
+    addresses:
+      - name: X (Twitter)
+        address: https://twitter.com
+coverImageName: cover.jpg
+publisherName: Independent
+tags:
+  - Contemporary
+  - Adventure
+  - Literary
+content: |
+   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a luctus
+   odio. Maecenas ac mauris lorem. Fusce semper quis neque id mattis. Nullam
+   vehicula fringilla egestas. Donec eget maximus ante, a semper justo.
+   Phasellus a venenatis neque. Etiam nisl magna, accumsan id felis sed,
+   facilisis condimentum lectus. Nulla euismod suscipit pretium. Aenean
+   vestibulum nec dui ac pellentesque. Sed euismod magna quis consectetur
+   elementum.
+
