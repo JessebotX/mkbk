@@ -2,6 +2,8 @@ package main
 
 import (
 	"html/template"
+	"errors"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -78,7 +80,7 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 	}
 	// add images into epub
 	imagesDirItems, err := os.ReadDir(imagesDir)
-	if err != nil {
+	if err != nil && errors.Is(err, fs.ErrExist) {
 		return err
 	}
 	for _, image := range imagesDirItems {
