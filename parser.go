@@ -110,7 +110,7 @@ func readChaptersDir(dir string, book *Book) ([]Chapter, error) {
 
 		chapter := Chapter{
 			Book: book,
-			Slug:   strings.TrimSuffix(filepath.Base(chapterPath), ".md"),
+			Slug: strings.TrimSuffix(filepath.Base(chapterPath), ".md"),
 		}
 
 		err = unmarshalChapter(chapterPath, &chapter)

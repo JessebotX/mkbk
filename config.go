@@ -8,26 +8,26 @@ import (
 type Book struct {
 	Params map[string]any
 
-	WebLayoutDir string
+	WebLayoutDir  string
 	EpubLayoutDir string
-	TextDir string
-	OutputDir string
+	TextDir       string
+	OutputDir     string
 
-	BaseURL string
-	Slug string
-	Title string
-	Status string
-	LanguageCode string
-	Tags []string
-	Logline string
-	Content string
-	ContentHTML template.HTML
-	Authors []Author
-	PublisherName string
+	BaseURL        string
+	Slug           string
+	Title          string
+	Status         string
+	LanguageCode   string
+	Tags           []string
+	Logline        string
+	Content        string
+	ContentHTML    template.HTML
+	Authors        []Author
+	PublisherName  string
 	CoverImageName string
-	Mirrors []Address
-	Series []BookSeries
-	Chapters []Chapter
+	Mirrors        []Address
+	Series         []BookSeries
+	Chapters       []Chapter
 }
 
 func (b Book) EpubBaseName() string {
@@ -35,28 +35,28 @@ func (b Book) EpubBaseName() string {
 }
 
 type BookSeries struct {
-	Name string
+	Name   string
 	Number float64
-	URL string
+	URL    string
 }
 
 type Chapter struct {
 	Params map[string]any
 
-	Book *Book
-	Slug string
-	Title string
-	Description string
-	ParsedDate time.Time
+	Book               *Book
+	Slug               string
+	Title              string
+	Description        string
+	ParsedDate         time.Time
 	ParsedLastModified time.Time
-	Weight int
-	Content string
-	ContentHTML template.HTML
+	Weight             int
+	Content            string
+	ContentHTML        template.HTML
 
 	Previous *Chapter
-	Next *Chapter
+	Next     *Chapter
 
-	Date string
+	Date    string
 	LastMod string
 }
 
@@ -67,8 +67,8 @@ type Author struct {
 }
 
 type Address struct {
-	Name    string
-	Address string
-	IsURL   bool
+	Name      string
+	Address   string
+	IsURL     bool
 	Alternate []Address
 }

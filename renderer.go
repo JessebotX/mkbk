@@ -1,8 +1,8 @@
 package main
 
 import (
-	"html/template"
 	"errors"
+	"html/template"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -15,8 +15,8 @@ const (
 	IndexTemplateName   = "index.html"
 	ChapterTemplateName = "_chapter.html"
 	RSSFeedTemplateName = "_rss.xml" // TODO implement RSS feeds
-	ImagesFolderName = "images"
-	CSSFolderName = "css"
+	ImagesFolderName    = "images"
+	CSSFolderName       = "css"
 )
 
 func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
@@ -137,20 +137,18 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 		}
 
 		/*
-		dir := filepath.Dir(coverName)
+			dir := filepath.Dir(coverName)
 
-		err = os.MkdirAll(filepath.Join(outputDir, dir), os.ModePerm)
-		if err != nil {
-			return err
-		}
+			err = os.MkdirAll(filepath.Join(outputDir, dir), os.ModePerm)
+			if err != nil {
+				return err
+			}
 
-		err = os.Link(coverName, filepath.Join(outputDir, coverName))
-		if err != nil {
-			return err
-		}*/
+			err = os.Link(coverName, filepath.Join(outputDir, coverName))
+			if err != nil {
+				return err
+			}*/
 	}
-
-
 
 	return nil
 }
