@@ -6,56 +6,69 @@ import (
 )
 
 type Book struct {
-	Params       map[string]any
-	LayoutDir    string
-	OutputDir    string
-	ChaptersDir  string
-	Slug         string
-	Title        string
-	Status       string
+	Params map[string]any
+
+	WebLayoutDir string
+	EpubLayoutDir string
+	TextDir string
+	OutputDir string
+
+	BaseURL string
+	Slug string
+	Title string
+	Status string
 	LanguageCode string
-	Tags         []string
-	Logline      string
-	Content      string
-	Authors      []Author
-	Publisher    string
-	CoverPath    string
-	Chapters     []Chapter
-	SeriesName   string
-	SeriesNumber float32
-	IDs          []string
-	Mirrors      []Address
+	Tags []string
+	Logline string
+	Content string
+	ContentHTML template.HTML
+	Authors []Author
+	PublisherName string
+	CoverImageName string
+	Mirrors []Address
+	Series []BookSeries
+	Chapters []Chapter
 }
 
 func (b Book) EpubBaseName() string {
 	return b.Slug + ".epub"
 }
 
+type BookSeries struct {
+	Name string
+	Number float64
+	URL string
+}
+
 type Chapter struct {
-	Params             map[string]any
-	Parent             *Book
-	ParentSectionTitle string
-	Slug               string
-	Title              string
-	Description        string
-	Date               time.Time
-	LastModified       time.Time
-	Weight             int
-	ContentHTML        template.HTML
-	Previous           *Chapter
-	Next               *Chapter
+	Params map[string]any
+
+	Book *Book
+	Slug string
+	Title string
+	Description string
+	ParsedDate time.Time
+	ParsedLastModified time.Time
+	Weight int
+	Content string
+	ContentHTML template.HTML
+
+	Previous *Chapter
+	Next *Chapter
+
+	Date string
+	LastMod string
 }
 
 type Author struct {
 	Name      string
 	NameSort  string
-	Bio       string
 	Addresses []Address
-	ImagePath string
 }
 
 type Address struct {
 	Name    string
 	Address string
 	IsURL   bool
+	Alternate []Address
 }

@@ -18,7 +18,7 @@ import (
 
 	"github.com/yuin/goldmark-meta"
 
-	"gopkg.in/yaml.v3"
+	yaml "gopkg.in/yaml.v3"
 )
 
 func UnmarshalBookConfigFile(path string, book *Book) error {
@@ -66,12 +66,16 @@ func UnmarshalBookConfigData(dir string, data []byte, book *Book) error {
 		book.OutputDir = "out"
 	}
 
-	if strings.TrimSpace(book.LayoutDir) == "" {
-		book.LayoutDir = "layout"
+	if strings.TrimSpace(book.WebLayoutDir) == "" {
+		book.WebLayoutDir = "web-layout"
 	}
 
-	if strings.TrimSpace(book.ChaptersDir) == "" {
-		book.ChaptersDir = "src"
+	if strings.TrimSpace(book.EpubLayoutDir) == "" {
+		book.EpubLayoutDir = "epub-layout"
+	}
+
+	if strings.TrimSpace(book.TextDir) == "" {
+		book.TextDir = "text"
 	}
 
 	if strings.TrimSpace(book.Slug) == "" {
@@ -79,7 +83,14 @@ func UnmarshalBookConfigData(dir string, data []byte, book *Book) error {
 		book.Slug = strings.ToLower(sanitizer.ReplaceAllString(book.Title, "-"))
 	}
 
-	book.Chapters, err = readChaptersDir(filepath.Join(dir, book.ChaptersDir), book)
+	// convert contents to html
+	book.ContentHTML, _, err = convertMarkdownToHTML([]byte(book.Content))
+	if err != nil {
+		return err
+	}
+
+	// read chapters
+	book.Chapters, err = readChaptersDir(filepath.Join(dir, book.TextDir), book)
 	if err != nil {
 		return err
 	}
@@ -88,19 +99,6 @@ func UnmarshalBookConfigData(dir string, data []byte, book *Book) error {
 }
 
 func readChaptersDir(dir string, book *Book) ([]Chapter, error) {
-	md := goldmark.New(
-		goldmark.WithExtensions(
-			extension.GFM,
-			meta.Meta,
-			extension.Footnote,
-		),
-		goldmark.WithParserOptions(
-			parser.WithAutoHeadingID(),
-			parser.WithAttribute(),
-		),
-		goldmark.WithRendererOptions(),
-	)
-
 	items, err := os.ReadDir(dir)
 	if err != nil {
 		return nil, err
@@ -111,11 +109,11 @@ func readChaptersDir(dir string, book *Book) ([]Chapter, error) {
 		chapterPath := filepath.Join(dir, item.Name())
 
 		chapter := Chapter{
-			Parent: book,
+			Book: book,
 			Slug:   strings.TrimSuffix(filepath.Base(chapterPath), ".md"),
 		}
 
-		err = unmarshalChapter(chapterPath, md, &chapter)
+		err = unmarshalChapter(chapterPath, &chapter)
 		if err != nil {
 			return chapters, err
 		}
@@ -141,19 +139,19 @@ func readChaptersDir(dir string, book *Book) ([]Chapter, error) {
 	return chapters, nil
 }
 
-func unmarshalChapter(path string, md goldmark.Markdown, chapter *Chapter) error {
+func unmarshalChapter(path string, chapter *Chapter) error {
 	content, err := os.ReadFile(path)
 	if err != nil {
 		return err
 	}
+	chapter.Content = string(content)
 
-	var buffer bytes.Buffer
-	context := parser.NewContext()
-	err = md.Convert(content, &buffer, parser.WithContext(context))
+	html, metadata, err := convertMarkdownToHTML(content)
 	if err != nil {
 		return err
 	}
-	metadata := meta.Get(context)
+
+	chapter.ContentHTML = html
 	chapter.Params = metadata
 
 	// set title (default: the base file name)
@@ -202,7 +200,7 @@ func unmarshalChapter(path string, md goldmark.Markdown, chapter *Chapter) error
 				return err
 			}
 
-			chapter.Date = date
+			chapter.ParsedDate = date
 		default:
 			return fmt.Errorf("%s chapter date is of the wrong type (expected string)", path)
 		}
@@ -218,12 +216,36 @@ func unmarshalChapter(path string, md goldmark.Markdown, chapter *Chapter) error
 				return err
 			}
 
-			chapter.LastModified = date
+			chapter.ParsedLastModified = date
 		default:
 			return fmt.Errorf("%s chapter last_modified is of the wrong type (expected string)", path)
 		}
 	}
-	chapter.ContentHTML = template.HTML(buffer.String())
 
 	return nil
+}
+
+func convertMarkdownToHTML(content []byte) (template.HTML, map[string]interface{}, error) {
+	md := goldmark.New(
+		goldmark.WithExtensions(
+			extension.GFM,
+			meta.Meta,
+			extension.Footnote,
+		),
+		goldmark.WithParserOptions(
+			parser.WithAutoHeadingID(),
+			parser.WithAttribute(),
+		),
+		goldmark.WithRendererOptions(),
+	)
+
+	var buffer bytes.Buffer
+	context := parser.NewContext()
+	err := md.Convert(content, &buffer, parser.WithContext(context))
+	if err != nil {
+		return template.HTML(""), nil, err
+	}
+	metadata := meta.Get(context)
+
+	return template.HTML(buffer.String()), metadata, nil
 }

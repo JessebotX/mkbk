@@ -13,10 +13,14 @@ const (
 	IndexTemplateName   = "index.html"
 	ChapterTemplateName = "_chapter.html"
 	RSSFeedTemplateName = "_rss.xml" // TODO implement RSS feeds
+	ImagesFolderName = "images"
+	CSSFolderName = "css"
 )
 
 func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
-	layoutDir := filepath.Join(inputDir, book.LayoutDir)
+	webLayoutDir := filepath.Join(inputDir, book.WebLayoutDir)
+	imagesDir := filepath.Join(inputDir, ImagesFolderName)
+	outputImagesDir := filepath.Join(outputDir, ImagesFolderName)
 
 	// clean up any existing output dir
 	err := os.RemoveAll(outputDir)
@@ -31,18 +35,18 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 	}
 
 	// read layout configurations
-	indexTemplate, err := template.ParseFiles(filepath.Join(layoutDir, IndexTemplateName))
+	indexTemplate, err := template.ParseFiles(filepath.Join(webLayoutDir, IndexTemplateName))
 	if err != nil {
 		return err
 	}
 
-	chapterTemplate, err := template.ParseFiles(filepath.Join(layoutDir, ChapterTemplateName))
+	chapterTemplate, err := template.ParseFiles(filepath.Join(webLayoutDir, ChapterTemplateName))
 	if err != nil {
 		return err
 	}
 
 	// copy other layout files (theme-specific stylesheets, images, etc.)
-	err = copyDirectoryToOutput(layoutDir, outputDir, []string{IndexTemplateName, ChapterTemplateName, "README.md"})
+	err = copyDirectoryToOutput(webLayoutDir, outputDir, []string{IndexTemplateName, ChapterTemplateName, "README.md"}, true)
 	if err != nil {
 		return err
 	}
@@ -56,6 +60,12 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 
 	// write index index
 	err = indexTemplate.Execute(indexFile, book)
+	if err != nil {
+		return err
+	}
+
+	// create folders
+	err = os.MkdirAll(outputImagesDir, os.ModePerm)
 	if err != nil {
 		return err
 	}
@@ -97,42 +107,35 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 		return err
 	}
 
-	if strings.TrimSpace(book.CoverPath) != "" {
-		dir := filepath.Dir(book.CoverPath)
+	coverName := book.CoverImageName
+	if strings.TrimSpace(coverName) != "" {
+		coverPath := filepath.Join(imagesDir, coverName)
+
+		err = os.Link(coverPath, filepath.Join(outputImagesDir, coverName))
+		if err != nil {
+			return err
+		}
+
+		/*
+		dir := filepath.Dir(coverName)
 
 		err = os.MkdirAll(filepath.Join(outputDir, dir), os.ModePerm)
 		if err != nil {
 			return err
 		}
 
-		err = os.Link(book.CoverPath, filepath.Join(outputDir, book.CoverPath))
+		err = os.Link(coverName, filepath.Join(outputDir, coverName))
 		if err != nil {
 			return err
-		}
+		}*/
 	}
 
-	for _, author := range book.Authors {
-		if strings.TrimSpace(author.ImagePath) == "" {
-			continue
-		}
 
-		dir := filepath.Dir(author.ImagePath)
-
-		err = os.MkdirAll(filepath.Join(outputDir, dir), os.ModePerm)
-		if err != nil {
-			return err
-		}
-
-		err = os.Link(author.ImagePath, filepath.Join(outputDir, author.ImagePath))
-		if err != nil {
-			return err
-		}
-	}
 
 	return nil
 }
 
-func copyDirectoryToOutput(inputDir, outputDir string, excludes []string) error {
+func copyDirectoryToOutput(inputDir, outputDir string, excludes []string, copySubdirs bool) error {
 	items, err := os.ReadDir(inputDir)
 	if err != nil {
 		return err
@@ -154,13 +157,15 @@ func copyDirectoryToOutput(inputDir, outputDir string, excludes []string) error 
 		fullPath := filepath.Join(inputDir, item.Name())
 		outputPath := filepath.Join(outputDir, item.Name())
 
-		if item.IsDir() {
+		if item.IsDir() && copySubdirs {
 			err = os.MkdirAll(outputPath, os.ModePerm)
 			if err != nil {
 				return err
 			}
 
-			return copyDirectoryToOutput(fullPath, outputPath, []string{})
+			return copyDirectoryToOutput(fullPath, outputPath, []string{}, copySubdirs)
+		} else if item.IsDir() && !copySubdirs {
+			continue
 		}
 
 		err = os.RemoveAll(outputPath)
