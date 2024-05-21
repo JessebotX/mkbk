@@ -76,6 +76,24 @@ func RenderBookToHTMLSite(inputDir, outputDir string, book *Book) error {
 	if err != nil {
 		return err
 	}
+	// add images into epub
+	imagesDirItems, err := os.ReadDir(imagesDir)
+	if err != nil {
+		return err
+	}
+	for _, image := range imagesDirItems {
+		imagePath, err := bookEpub.AddImage(filepath.Join(imagesDir, image.Name()), image.Name())
+		if err != nil {
+			return err
+		}
+
+		if image.Name() == book.CoverImageName {
+			err = bookEpub.SetCover(imagePath, "")
+			if err != nil {
+				return err
+			}
+		}
+	}
 
 	// parse chapters
 	for _, chapter := range book.Chapters {
