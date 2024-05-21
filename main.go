@@ -8,7 +8,7 @@ import (
 func main() {
 	book := Book{}
 
-	err := UnmarshalBookConfigFile("mkbk-book.yml", &book)
+	err := UnmarshalBookConfigFile("mkbk.yml", &book)
 	if err != nil {
 		log.Fatal(err)
 	}
