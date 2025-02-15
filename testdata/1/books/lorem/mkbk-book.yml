@@ -1,0 +1,12 @@
+title: The Lorem Ipsum
+titleSort: Lorem Ipsum, The
+authors: John Doe
+authorsSort: Doe, John
+description: Lorem ipsum dolor sit amet...
+languageCode: en
+content: |
+  Hello world
+
+  This is my text...
+status: Completed
+
