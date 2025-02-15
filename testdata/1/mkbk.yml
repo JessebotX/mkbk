@@ -1,0 +1,4 @@
+title: The Collection
+baseURL: https://example-collection-website-address.com
+params:
+  extra: any
