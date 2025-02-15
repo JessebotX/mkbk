@@ -1,4 +1,6 @@
 title: The Collection
 baseURL: https://example-collection-website-address.com
+bookDirs:
+  - books/lorem
 params:
   extra: any
