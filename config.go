@@ -5,22 +5,17 @@ import (
 )
 
 type Collection struct {
-	Params map[any]any
-	Books []Book
-	LayoutsDir string
-	OutputDir string
-
 	Title string
 	BaseURL string
 	LanguageCode string
+
+	Params map[string]any
+	Books []Book
+	LayoutsDir string
+	OutputDir string
 }
 
 type Book struct {
-	Params map[any]any
-	Chapters []Chapter
-	LastModified time.Time
-	DatePublished time.Time
-
 	Title string
 	TitleSort string
 	Authors string
@@ -31,15 +26,20 @@ type Book struct {
 	Content string
 	Status string
 	CoverImageName string
+
+	Params map[string]any
+	Chapters []Chapter
+	LastModified time.Time
+	DatePublished time.Time
 }
 
 type Chapter struct {
-	Params map[any]any
-
 	Title string
 	Description string
 	Content string
 	Weight uint8
 	LastModified time.Time
 	DatePublished time.Time
+
+	Params map[string]any
 }
