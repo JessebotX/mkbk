@@ -40,3 +40,21 @@ func Unmarshal(data []byte, collection *Collection) error {
 	return nil
 }
 
+func UnmarshalBook(data []byte, book *Book) error {
+	err := yaml.Unmarshal(data, &book.Params)
+	if err != nil {
+		return err
+	}
+
+	jsonbody, err := json.Marshal(book.Params)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(jsonbody, &book)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
