@@ -7,6 +7,7 @@ import (
 type Collection struct {
 	Title string
 	BaseURL string
+	BookDirs []string
 	LanguageCode string
 
 	Params map[string]any
@@ -28,6 +29,7 @@ type Book struct {
 	CoverImageName string
 
 	Params map[string]any
+	ChaptersDir string
 	Chapters []Chapter
 	LastModified time.Time
 	DatePublished time.Time
