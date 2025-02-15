@@ -5,7 +5,7 @@ import (
 )
 
 type Collection struct {
-	Params []any
+	Params map[any]any
 	Books []Book
 	LayoutsDir string
 	OutputDir string
@@ -16,7 +16,7 @@ type Collection struct {
 }
 
 type Book struct {
-	Params []any
+	Params map[any]any
 	Chapters []Chapter
 	LastModified time.Time
 	DatePublished time.Time
@@ -34,7 +34,7 @@ type Book struct {
 }
 
 type Chapter struct {
-	Params []any
+	Params map[any]any
 
 	Title string
 	Description string
