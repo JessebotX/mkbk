@@ -27,12 +27,13 @@ type Book struct {
 	Content string
 	Status string
 	CoverImageName string
+	DatePublished string
 
 	Params map[string]any
 	ChaptersDir string
 	Chapters []Chapter
-	LastModified time.Time
-	DatePublished time.Time
+	LastModifiedParsed time.Time
+	DatePublishedParsed time.Time
 }
 
 type Chapter struct {
@@ -40,8 +41,10 @@ type Chapter struct {
 	Description string
 	Content string
 	Weight uint8
-	LastModified time.Time
-	DatePublished time.Time
+	DatePublished string
+	LastModified string
 
+	DatePublishedParsed time.Time
+	LastModifiedParsed time.Time
 	Params map[string]any
 }
