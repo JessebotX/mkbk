@@ -1,6 +1,7 @@
 package mkbk
 
 import (
+	"html/template"
 	"time"
 )
 
@@ -9,6 +10,7 @@ const (
 	BookStatusDefault = "Completed"
 	LayoutsDirDefault = "./layouts"
 	OutputDirDefault = "./out"
+	ChaptersDirDefault = "./text"
 )
 
 type Collection struct {
@@ -36,6 +38,8 @@ type Book struct {
 	CoverImageName string
 	DatePublished string
 
+	BookDir string
+	ID string
 	LayoutsDir string
 	OutputDir string
 	Params map[string]any
@@ -43,6 +47,7 @@ type Book struct {
 	Chapters []Chapter
 	LastModifiedParsed time.Time
 	DatePublishedParsed time.Time
+	ContentHTML template.HTML
 }
 
 type Chapter struct {
@@ -50,11 +55,10 @@ type Chapter struct {
 	Description string
 	Content string
 	Weight int
-	DatePublished string
-	LastModified string
 
 	DatePublishedParsed time.Time
 	LastModifiedParsed time.Time
 	Params map[string]any
+	ContentHTML template.HTML
 }
 

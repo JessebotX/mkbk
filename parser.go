@@ -1,11 +1,26 @@
 package mkbk
 
 import (
+	"bytes"
 	"encoding/json"
+	"html/template"
+	"os"
+	"fmt"
 	"path/filepath"
 	"strings"
+	"time"
+
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
+
+	"github.com/yuin/goldmark-meta"
 
 	"gopkg.in/yaml.v3"
+)
+
+const (
+	DateLayoutString = "2006-01-02T03:04:05"
 )
 
 func Unmarshal(data []byte, collection *Collection) error {
@@ -71,6 +86,10 @@ func UnmarshalBook(data []byte, book *Book, collection *Collection) error {
 		}
 	}
 
+	if strings.TrimSpace(book.ChaptersDir) == "" {
+		book.ChaptersDir = filepath.Join(ChaptersDirDefault)
+	}
+
 	if strings.TrimSpace(collection.LayoutsDir) == "" {
 		collection.LayoutsDir = filepath.Join(LayoutsDirDefault)
 	}
@@ -83,5 +102,158 @@ func UnmarshalBook(data []byte, book *Book, collection *Collection) error {
 		book.Status = BookStatusDefault
 	}
 
+	// parse blurb
+	contentHTML, _, err := convertMarkdownToHTML([]byte(book.Content))
+	if err != nil {
+		return err
+	}
+	book.ContentHTML = contentHTML
+
+	// read chapters
+	fullChaptersDir := filepath.Join(book.BookDir, book.ChaptersDir)
+	chapterFiles, err := os.ReadDir(fullChaptersDir)
+	if err != nil {
+		return err
+	}
+
+	chapters := make([]Chapter, len(chapterFiles))
+	for _, file := range chapterFiles {
+		// ignore hidden files
+		if strings.HasPrefix(file.Name(), ".") {
+			continue
+		}
+
+		chapterFilePath := filepath.Join(fullChaptersDir, file.Name())
+		chapter, err := parseChapter(chapterFilePath)
+		if err != nil {
+			return err
+		}
+		chapters = append(chapters, chapter)
+	}
+	book.Chapters = chapters
+
 	return nil
+}
+
+func parseChapter(path string) (Chapter, error) {
+	chapter := Chapter{}
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return chapter, err
+	}
+
+	html, metadata, err := convertMarkdownToHTML(data)
+	if err != nil {
+		return chapter, err
+	}
+
+	chapter.Content = string(data)
+	chapter.ContentHTML = html
+	chapter.Params = metadata
+
+	// set title (default: the base file name)
+	if metadata["title"] != nil {
+		switch v := metadata["title"].(type) {
+		case string:
+			chapter.Title = v
+		default:
+			return chapter, fmt.Errorf("%s chapter title is of the wrong type (expected string)", path)
+		}
+	} else {
+		chapter.Title = strings.TrimSuffix(filepath.Base(path), filepath.Ext(path))
+	}
+
+	// set description (default: the chapter title)
+	if metadata["description"] != nil {
+		switch v := metadata["description"].(type) {
+		case string:
+			chapter.Description = v
+		default:
+			return chapter, fmt.Errorf("%s chapter description is of the wrong type (expected string)", path)
+		}
+	} else {
+		chapter.Description = "Read " + chapter.Title
+	}
+
+	// set chapter weight if provided (default: 1)
+	if metadata["weight"] != nil {
+		switch v := metadata["weight"].(type) {
+		case int:
+			chapter.Weight = v
+		default:
+			return chapter, fmt.Errorf("%s chapter weight is of the wrong type (expected int)", path)
+		}
+	} else {
+		chapter.Weight = 1
+	}
+
+	// set date if provided
+	if metadata["date"] != nil {
+		switch v := metadata["date"].(type) {
+		case string:
+			dateString := v
+			date, err := time.Parse(DateLayoutString, dateString)
+			if err != nil {
+				return chapter, err
+			}
+
+			chapter.DatePublishedParsed = date
+		default:
+			return chapter, fmt.Errorf("%s chapter date is of the wrong type (expected string)", path)
+		}
+	}
+
+	// set date if provided
+	if metadata["last_modified"] != nil {
+		switch v := metadata["last_modified"].(type) {
+		case string:
+			dateString := v
+			date, err := time.Parse(DateLayoutString, dateString)
+			if err != nil {
+				return chapter, err
+			}
+
+			chapter.LastModifiedParsed = date
+		default:
+			return chapter, fmt.Errorf("%s chapter last_modified is of the wrong type (expected string)", path)
+		}
+	}
+
+	return chapter, nil
+}
+
+func convertMarkdownToHTML(content []byte) (template.HTML, map[string]any, error) {
+	md := goldmark.New(
+		goldmark.WithExtensions(
+			meta.Meta,
+			extension.GFM,
+			extension.Footnote,
+			extension.NewTypographer(
+				extension.WithTypographicSubstitutions(
+					extension.TypographicSubstitutions{
+						// replace -- with an em-dash, ignore en-dashes
+						extension.EnDash: []byte("&mdash;"),
+						extension.EmDash: nil,
+					},
+				),
+			),
+		),
+		goldmark.WithParserOptions(
+			parser.WithAttribute(),
+			parser.WithAutoHeadingID(),
+		),
+		goldmark.WithRendererOptions(),
+	)
+
+	var buffer bytes.Buffer
+	context := parser.NewContext()
+	err := md.Convert(content, &buffer, parser.WithContext(context))
+	if err != nil {
+		return template.HTML(""), nil, err
+	}
+
+	metadata := meta.Get(context)
+
+	return template.HTML(buffer.String()), metadata, nil
 }

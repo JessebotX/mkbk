@@ -30,7 +30,7 @@ func main() {
 
 	books := make([]mkbk.Book, len(collection.BookDirs))
 	for _, bookDir := range collection.BookDirs {
-		var book mkbk.Book
+		book := mkbk.Book{BookDir: filepath.Join(workingDir, bookDir)}
 
 		fullBookDirPath := filepath.Join(workingDir, bookDir)
 		bookData, err := os.ReadFile(filepath.Join(fullBookDirPath, BookConfigFileName))
