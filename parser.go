@@ -26,11 +26,11 @@ func Unmarshal(data []byte, collection *Collection) error {
 
 	// Set default values
 	if strings.TrimSpace(collection.LayoutsDir) == "" {
-		collection.LayoutsDir = filepath.Join(LayoutsDirDefault)
+		collection.LayoutsDir = LayoutsDirDefault
 	}
 
 	if strings.TrimSpace(collection.OutputDir) == "" {
-		collection.OutputDir = filepath.Join(OutputDirDefault)
+		collection.OutputDir = OutputDirDefault
 	}
 
 	if strings.TrimSpace(collection.LanguageCode) == "" {
