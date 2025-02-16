@@ -38,7 +38,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		err = mkbk.UnmarshalBook(bookData, &book)
+		err = mkbk.UnmarshalBook(bookData, &book, &collection)
 		if err != nil {
 			log.Fatal(err)
 		}

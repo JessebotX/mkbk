@@ -4,6 +4,13 @@ import (
 	"time"
 )
 
+const (
+	LanguageCodeDefault = "en"
+	BookStatusDefault = "Completed"
+	LayoutsDirDefault = "./layouts"
+	OutputDirDefault = "./out"
+)
+
 type Collection struct {
 	Title string
 	BaseURL string
@@ -29,6 +36,8 @@ type Book struct {
 	CoverImageName string
 	DatePublished string
 
+	LayoutsDir string
+	OutputDir string
 	Params map[string]any
 	ChaptersDir string
 	Chapters []Chapter
@@ -40,7 +49,7 @@ type Chapter struct {
 	Title string
 	Description string
 	Content string
-	Weight uint8
+	Weight int
 	DatePublished string
 	LastModified string
 
@@ -48,3 +57,4 @@ type Chapter struct {
 	LastModifiedParsed time.Time
 	Params map[string]any
 }
+
