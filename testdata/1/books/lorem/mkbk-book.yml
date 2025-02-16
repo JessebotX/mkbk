@@ -4,9 +4,13 @@ authors: John Doe
 authorsSort: Doe, John
 description: Lorem ipsum dolor sit amet...
 languageCode: en
-content: |
-  Hello world
+content: |-
+  _Enter this new world_
 
-  This is my text...
+  > Great book!
+  >
+  > - Bob
+
+  This is--**my text**!
 status: Completed
 
