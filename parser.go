@@ -7,6 +7,7 @@ import (
 	"os"
 	"fmt"
 	"path/filepath"
+	"slices"
 	"strings"
 	"time"
 
@@ -130,6 +131,22 @@ func UnmarshalBook(data []byte, book *Book, collection *Collection) error {
 		}
 		chapters = append(chapters, chapter)
 	}
+
+	slices.SortFunc(chapters, func(a, b Chapter) int {
+		// TODO also compare date, then title
+		return a.Weight - b.Weight
+	})
+
+	for i, _ := range chapters {
+		if i >= 1 {
+			chapters[i].Previous = &chapters[i-1]
+		}
+
+		if i < (len(chapters) - 1) {
+			chapters[i].Next = &chapters[i+1]
+		}
+	}
+
 	book.Chapters = chapters
 
 	return nil

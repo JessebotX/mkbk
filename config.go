@@ -60,5 +60,7 @@ type Chapter struct {
 	LastModifiedParsed time.Time
 	Params map[string]any
 	ContentHTML template.HTML
+	Next *Chapter
+	Previous *Chapter
 }
 
