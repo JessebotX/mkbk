@@ -38,6 +38,7 @@ type Book struct {
 	CoverImageName string
 	DatePublished string
 
+	Parent *Collection
 	BookDir string
 	ID string
 	LayoutsDir string
@@ -56,6 +57,7 @@ type Chapter struct {
 	Content string
 	Weight int
 
+	Parent *Book
 	DatePublishedParsed time.Time
 	LastModifiedParsed time.Time
 	Params map[string]any

@@ -129,6 +129,7 @@ func UnmarshalBook(data []byte, book *Book, collection *Collection) error {
 		if err != nil {
 			return err
 		}
+		chapter.Parent = book
 		chapters = append(chapters, chapter)
 	}
 
@@ -149,6 +150,7 @@ func UnmarshalBook(data []byte, book *Book, collection *Collection) error {
 	}
 
 	book.Chapters = chapters
+	book.Parent = collection
 
 	return nil
 }
