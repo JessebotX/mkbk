@@ -10,20 +10,45 @@ func TestUnmarshalCollectionBasic(t *testing.T) {
 	if err != nil {
 		t.Fatalf(`Unmarshal(...) = %v, want nil, error`, err)
 	}
-	if collection.Title != "" {
-		t.Fatalf(`collection.Title = %v, want %v, error`, collection.Title, "")
+
+	{
+		got := collection.Title
+		want := ""
+		if got != want {
+			t.Fatalf(`collection.Title = %v, want %v, error`, got, want)
+		}
 	}
-	if collection.LanguageCode != LanguageCodeDefault {
-		t.Fatalf(`collection.LanguageCode = %v, want %v, error`, collection.LanguageCode, LanguageCodeDefault)
+
+	{
+		got := collection.LanguageCode
+		want := LanguageCodeDefault
+		if got != want {
+			t.Fatalf(`collection.LanguageCode = %v, want %v, error`, got, want)
+		}
 	}
-	if collection.LayoutsDir != LayoutsDirDefault {
-		t.Fatalf(`collection.LayoutsDir = %v, want %v, error`, collection.LayoutsDir, LayoutsDirDefault)
+
+	{
+		got := collection.LayoutsDir
+		want := LayoutsDirDefault
+		if got != want {
+			t.Fatalf(`collection.LayoutsDir = %v, want %v, error`, got, want)
+		}
 	}
-	if collection.OutputDir != OutputDirDefault {
-		t.Fatalf(`collection.OutputDir = %v, want %v, error`, collection.OutputDir, OutputDirDefault)
+
+	{
+		got := collection.OutputDir
+		want := OutputDirDefault
+		if got != want {
+			t.Fatalf(`collection.OutputDir = %v, want %v, error`, got, want)
+		}
 	}
-	if collection.Params["title"] == collection.Title {
-		t.Fatalf(`collection.Params["title"] = %v, want %v, error`, collection.Params["title"], collection.Title)
+
+	{
+		got := collection.Params["title"]
+		want := collection.Title
+		if got == want {
+			t.Fatalf(`collection.Params["title"] = %v, want %v, error`, got, want)
+		}
 	}
 }
 
