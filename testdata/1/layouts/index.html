@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="{{ .LanguageCode }}">
+    <head>
+        <link rel="stylesheet" href="theme.css">
+
+        <title>{{ .Title }}</title>
+    </head>
+
+    <body>
+        <h1>{{ .Title }} Collection Homepage</h1>
+
+        <ul>
+            {{ range .Books }}
+            <li>{{ .Title }}</li>
+            {{ end }}
+        </ul>
+    </body>
+</html>
