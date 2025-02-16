@@ -132,6 +132,7 @@ func UnmarshalBook(data []byte, book *Book, collection *Collection) error {
 		chapters = append(chapters, chapter)
 	}
 
+	// sort and set next and previous chapters
 	slices.SortFunc(chapters, func(a, b Chapter) int {
 		// TODO also compare date, then title
 		return a.Weight - b.Weight
