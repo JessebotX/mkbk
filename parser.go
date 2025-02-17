@@ -156,7 +156,9 @@ func UnmarshalBook(data []byte, book *Book, collection *Collection) error {
 }
 
 func parseChapter(path string) (Chapter, error) {
-	chapter := Chapter{}
+	chapter := Chapter{
+		ID: filepath.Base(path),
+	}
 
 	data, err := os.ReadFile(path)
 	if err != nil {

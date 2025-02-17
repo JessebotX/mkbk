@@ -52,6 +52,7 @@ type Book struct {
 }
 
 type Chapter struct {
+	ID string
 	Title string
 	Description string
 	Content string
