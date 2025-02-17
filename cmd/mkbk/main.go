@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -9,6 +10,7 @@ import (
 )
 
 const (
+	Version = "1.0"
 	CollectionConfigFileName = "mkbk.yml"
 	BookConfigFileName = "mkbk-book.yml"
 
@@ -24,9 +26,22 @@ const (
 )
 
 func main() {
+	workingDir := "./"
+	if len(os.Args) > 1 {
+		switch arg := os.Args[1]; arg {
+		case "-h":
+			fmt.Printf("USAGE: %v <directory|-h|-v>\n", os.Args[0])
+			os.Exit(0)
+		case "-v":
+			fmt.Printf("%v v%v\n", os.Args[0], Version)
+			os.Exit(0)
+		default:
+			workingDir = filepath.Join(arg)
+		}
+	}
+
 	collection := mkbk.Collection{}
 
-	workingDir := filepath.Join("testdata", "1")
 	data, err := os.ReadFile(filepath.Join(workingDir, CollectionConfigFileName))
 	if err != nil {
 		log.Fatal(err)
