@@ -157,7 +157,7 @@ func UnmarshalBook(data []byte, book *Book, collection *Collection) error {
 
 func parseChapter(path string) (Chapter, error) {
 	chapter := Chapter{
-		ID: filepath.Base(path),
+		ID: strings.TrimSuffix(filepath.Base(path), ".md"),
 	}
 
 	data, err := os.ReadFile(path)
