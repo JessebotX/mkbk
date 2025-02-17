@@ -1,0 +1,7 @@
+{{ .Title }} Book
+
+<ul>
+    {{ range .Chapters }}
+    <li><a href="{{ .ID }}.html">{{ .Title }}</a></li>
+    {{ end }}
+</ul>
