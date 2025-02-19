@@ -51,6 +51,10 @@ type Book struct {
 	ContentHTML template.HTML
 }
 
+func (b Book) EpubBaseName() string {
+	return b.ID + ".epub"
+}
+
 type Chapter struct {
 	ID string
 	Title string

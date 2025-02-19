@@ -8,6 +8,7 @@ import (
 
 	"github.com/JessebotX/mkbk"
 	"golang.org/x/sync/errgroup"
+	epub "github.com/go-shiori/go-epub"
 )
 
 func RenderCollectionToHTML(workingDir string, collection mkbk.Collection) error {
@@ -70,14 +71,20 @@ func RenderCollectionToHTML(workingDir string, collection mkbk.Collection) error
 			continue
 		}
 
-		g.Go(func() error {
-			bookInputDir := filepath.Join(workingDir, book.BookDir)
-			bookOutputDir := filepath.Join(outputDir, book.ID)
-			err = os.MkdirAll(bookOutputDir, os.ModePerm)
-			if err != nil {
-				return err
-			}
+		bookEpub, err := epub.NewEpub(book.Title)
+		if err != nil {
+			return err
+		}
+		// TODO add images into epub
 
+		bookInputDir := filepath.Join(workingDir, book.BookDir)
+		bookOutputDir := filepath.Join(outputDir, book.ID)
+		err = os.MkdirAll(bookOutputDir, os.ModePerm)
+		if err != nil {
+			return err
+		}
+
+		g.Go(func() error {
 			// create book index file
 			indexFile, err := os.Create(filepath.Join(bookOutputDir, BookOutputIndexFile))
 			if err != nil {
@@ -99,28 +106,25 @@ func RenderCollectionToHTML(workingDir string, collection mkbk.Collection) error
 				if err != nil {
 					return err
 				}
+
+				imagePath, err := bookEpub.AddImage(oldCoverPath, book.CoverImageName)
+				if err != nil {
+					return err
+				}
+
+				err = bookEpub.SetCover(imagePath, "")
+				if err != nil {
+					return err
+				}
 			}
 
 			return nil
 		})
-	}
-	err = g.Wait()
-	if err != nil {
-		return err
-	}
 
-	// create chapters
-	g = new(errgroup.Group)
-	for _, book := range collection.Books {
-		if strings.TrimSpace(book.Title) == "" {
-			continue
-		}
-
-		bookDir := filepath.Join(outputDir, book.ID)
 		for _, chapter := range book.Chapters {
 			g.Go(func() error {
 				// create chapter index file
-				chapterFile, err := os.Create(filepath.Join(bookDir, chapter.ID+".html"))
+				chapterFile, err := os.Create(filepath.Join(bookOutputDir, chapter.ID+".html"))
 				if err != nil {
 					return err
 				}
@@ -130,9 +134,24 @@ func RenderCollectionToHTML(workingDir string, collection mkbk.Collection) error
 				if err != nil {
 					return err
 				}
-
 				return nil
 			})
+
+			// NOTE writing to epub done serially
+			if strings.TrimSpace(chapter.Title) != "" {
+				sectionContent := "<h1>" + chapter.Title + "</h1>" + string(chapter.ContentHTML)
+				_, err = bookEpub.AddSection(sectionContent, chapter.Title, "", "")
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+		// create epub
+		bookEpubPath := filepath.Join(bookOutputDir, book.EpubBaseName())
+		err = bookEpub.Write(bookEpubPath)
+		if err != nil {
+			return err
 		}
 	}
 	err = g.Wait()
