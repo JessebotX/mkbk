@@ -117,7 +117,7 @@ func UnmarshalBook(data []byte, book *Book, collection *Collection) error {
 		return err
 	}
 
-	chapters := make([]Chapter, len(chapterFiles))
+	chapters := make([]Chapter, 0)
 	for _, file := range chapterFiles {
 		// ignore hidden files
 		if strings.HasPrefix(file.Name(), ".") {

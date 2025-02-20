@@ -52,7 +52,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	books := make([]mkbk.Book, len(collection.BookDirs))
+	books := make([]mkbk.Book, 0)
 	for _, bookDir := range collection.BookDirs {
 		book := mkbk.Book{
 			ID: filepath.Base(bookDir),
