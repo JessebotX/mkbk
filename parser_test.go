@@ -1,4 +1,4 @@
-package mkbk
+package main
 
 import (
 	"testing"

@@ -5,8 +5,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-
-	"github.com/JessebotX/mkbk"
 )
 
 const (
@@ -40,21 +38,21 @@ func main() {
 		}
 	}
 
-	collection := mkbk.Collection{}
+	collection := Collection{}
 
 	data, err := os.ReadFile(filepath.Join(workingDir, CollectionConfigFileName))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = mkbk.Unmarshal(data, &collection)
+	err = Unmarshal(data, &collection)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	books := make([]mkbk.Book, 0)
+	books := make([]Book, 0)
 	for _, bookDir := range collection.BookDirs {
-		book := mkbk.Book{
+		book := Book{
 			ID: filepath.Base(bookDir),
 			BookDir: filepath.Join(workingDir, bookDir),
 		}
@@ -65,7 +63,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		err = mkbk.UnmarshalBook(bookData, &book, &collection)
+		err = UnmarshalBook(bookData, &book, &collection)
 		if err != nil {
 			log.Fatal(err)
 		}
