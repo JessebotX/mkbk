@@ -8,18 +8,18 @@ import (
 )
 
 const (
-	Version = "1.0"
+	Version                  = "1.0"
 	CollectionConfigFileName = "mkbk.yml"
-	BookConfigFileName = "mkbk-book.yml"
+	BookConfigFileName       = "mkbk-book.yml"
 
-	IndexTemplateName   = "index.html"
-	BookTemplateName = "index.html"
-	BookFolderName = "_book"
-	ChapterTemplateName = "_chapter.html"
-	RSSFeedTemplateName = "_rss.xml" // TODO implement RSS feeds
-	ImagesFolderName    = "images"
-	CSSFolderName       = "css"
-	BookOutputIndexFile = "index.html"
+	IndexTemplateName         = "index.html"
+	BookTemplateName          = "index.html"
+	BookFolderName            = "_book"
+	ChapterTemplateName       = "_chapter.html"
+	RSSFeedTemplateName       = "_rss.xml" // TODO implement RSS feeds
+	ImagesFolderName          = "images"
+	CSSFolderName             = "css"
+	BookOutputIndexFile       = "index.html"
 	CollectionOutputIndexFile = "index.html"
 )
 
@@ -53,7 +53,7 @@ func main() {
 	books := make([]Book, 0)
 	for _, bookDir := range collection.BookDirs {
 		book := Book{
-			ID: filepath.Base(bookDir),
+			ID:      filepath.Base(bookDir),
 			BookDir: filepath.Join(workingDir, bookDir),
 		}
 

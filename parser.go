@@ -3,9 +3,9 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"os"
-	"fmt"
 	"path/filepath"
 	"slices"
 	"strings"

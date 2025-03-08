@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"golang.org/x/sync/errgroup"
 	epub "github.com/go-shiori/go-epub"
+	"golang.org/x/sync/errgroup"
 )
 
 func RenderCollectionToHTML(workingDir string, collection Collection) error {
@@ -55,7 +55,7 @@ func RenderCollectionToHTML(workingDir string, collection Collection) error {
 	// create book indexes and cover image
 	for _, book := range collection.Books {
 		g.Go(func() error {
-			err = RenderBookToHTML(workingDir, book, collection);
+			err = RenderBookToHTML(workingDir, book, collection)
 			if err != nil {
 				return err
 			}
